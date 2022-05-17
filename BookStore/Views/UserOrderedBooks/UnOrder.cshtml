@@ -1,0 +1,112 @@
+﻿@model BookStore.Models.UserOrderedBook
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link href="~/Images/logo.png" rel="icon" />
+    <link href="~/Css/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Css/Index.css" rel="stylesheet" />
+    <link href="~/Css/bootstrap-5.0.2-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <title>Unorder</title>
+    <style>
+        /*coordinating the details button*/
+        .buttons, a {
+            color: white !important;
+            text-decoration: none !important;
+        }
+        /*coordinating the buttons*/
+        .btn-dark {
+            width: 400px !important;
+            height: auto !important;
+        }
+
+        .btn-danger {
+            margin: 10px 0px !important;
+            width: 400px !important;
+        }
+
+        .coordinator {
+            width: 400px;
+            margin-left: 450px;
+            margin-top: 150px;
+        }
+        footer{
+            position: absolute;
+            bottom:0;
+            width:100%;
+        }
+    </style>
+</head>
+<body>
+    <!--start navbar-->
+    <nav class="navbar navbar-expand-sm">
+        <div class="container">
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")">E-bookstore</a>
+            <!--button in case mobile-->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mynavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item row" style="flex-direction:row; align-items:center; flex-wrap:nowrap">
+                        <i class="fa fa-shopping-cart col-1" aria-hidden="true"></i>
+                        @Html.ActionLink("Your Cart", "../UserOrderedBooks/Index", new { id = Convert.ToInt32(Session["ID"]) }, new { @class = "nav-link col-10" })
+                    </li>
+                </ul>
+                <!--show when user login-->
+                @if (Session["username"] != null)
+                {
+                    <div class="d-flex" id="user_login">
+                        @if (Session["username"].ToString() == "Admin")
+                        {
+                            <a id="user_name" class="nav-link" style="text-decoration:underline;" href="@Url.Action("func", "Admins")">@Session["UserName"].ToString()</a>
+                        }
+                        else
+                        {
+                            <a id="user_name" class="nav-link" style="text-decoration:underline;" href="@Url.Action("EditUserInfo/" + Convert.ToInt32(Session["ID"]) , "Users")">@Session["UserName"].ToString()</a>
+                        }
+                        @Html.ActionLink("Logout", "../Home/Logout", null, new { @class = "nav-link" })
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex" style="align-items: center;" id="guest">
+                        @Html.ActionLink("Sign up", "../Users/SignUp", null, new { @class = "nav-link" })
+                        /
+                        @Html.ActionLink("Login", "../Users/Login", null, new { @class = "nav-link" })
+                    </div>
+                }
+            </div>
+        </div>
+    </nav>
+    <!--end navbar-->
+    <div class="coordinator">
+        <h3>Are You Sure You Want To Unorder @Model.Book.bookTitle Book?</h3>
+        <hr />
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Yes" class="btn btn-danger" />
+            </div>
+            <button class="btn btn-dark">
+                @Html.ActionLink("No, Go Back", "Index/" + Model.userId, null, new { @class = "buttons" })
+            </button>
+        }
+    </div>
+    <!--start footer-->
+    <footer>
+        <div class="container">
+            <h3>Copyrights © 2022 All rights reserved</h3>
+        </div>
+    </footer>
+    <!--end footer-->
+</body>
+</html>
