@@ -1,0 +1,126 @@
+﻿@model BookStore.Models.User
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link href="~/Images/logo.png" rel="icon" />
+    <link href="~/Css/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Css/Index.css" rel="stylesheet" />
+    <link href="~/Css/bootstrap-5.0.2-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width" />
+    <title>User Login</title>
+    <style>
+        /*coordinating the buttons*/
+        .btn-dark {
+            width: 340px !important;
+            height: auto !important;
+        }
+
+        .coordinator {
+            width: 400px;
+            margin-left: 500px;
+            margin-top: 100px;
+        }
+        footer{
+            position:absolute;
+            bottom:0;
+            width:100%;
+        }
+    </style>
+    <!-- bootstrap -->
+</head>
+<body>
+    <!--start navbar-->
+    <nav class="navbar navbar-expand-sm">
+        <div class="container">
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")">E-bookstore</a>
+            <!--button in case mobile-->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mynavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item row" style="flex-direction:row; align-items:center; flex-wrap:nowrap">
+                        <i class="fa fa-shopping-cart col-1" aria-hidden="true"></i>
+                        @Html.ActionLink("Your Cart", "../UserOrderedBooks/Index", new { id = Convert.ToInt32(Session["ID"]) }, new { @class = "nav-link col-10" })
+                    </li>
+                </ul>
+                <!--show when user login-->
+                @if (Session["username"] != null)
+                {
+                    <div class="d-flex" id="user_login">
+                        @if (Session["username"].ToString() == "Admin")
+                        {
+                            <a id="user_name" class="nav-link" style="text-decoration:underline;" href="@Url.Action("func", "Admins")">@Session["UserName"].ToString()</a>
+                        }
+                        else
+                        {
+                            <a id="user_name" class="nav-link" style="text-decoration:underline;" href="@Url.Action("EditUserInfo/" + Convert.ToInt32(Session["ID"]) , "Users")">@Session["UserName"].ToString()</a>
+                        }
+                        @Html.ActionLink("Logout", "../Home/Logout", null, new { @class = "nav-link" })
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex" style="align-items: center;" id="guest">
+                        @Html.ActionLink("Sign up", "../Users/SignUp", null, new { @class = "nav-link" })
+                        /
+                        @Html.ActionLink("Login", "../Users/Login", null, new { @class = "nav-link" })
+                    </div>
+                }
+            </div>
+        </div>
+    </nav>
+    <!--end navbar-->
+    <!--the form starts from here-->
+    <div class="coordinator">
+        <form action="/Users/Login" class="loginForm" method="post">
+            @Html.AntiForgeryToken()
+            <div class="row">
+
+                <div class="form-horizontal">
+                    <h3>Login as User</h3>
+                    <br />
+                    <div class="form-group">
+                        <label for="userEmail" class="form-label">Email:</label>
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.userEmail, new { @class = "form-control", type = "email", placeholder = "Enter your email" })
+                            @Html.ValidationMessageFor(model => model.userEmail, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userPassword" class="form-label">Password:</label>
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.userPassword, new { @class = "form-control", type = "password", placeholder = "Enter your Password" })
+                            @Html.ValidationMessageFor(model => model.userPassword, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <br />
+                    @Html.ActionLink("Login as admin?", "../Admins/Login", null, new { @class = "nav-link" })
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Login" class="btn btn-dark" style="width:295px;" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--the form ends here-->
+    <!--start footer-->
+    <footer>
+        <div class="container">
+            <h3>Copyrights © 2022 All rights reserved</h3>
+        </div>
+    </footer>
+    <!--end footer-->
+</body>
+</html>

@@ -1,0 +1,149 @@
+﻿@model BookStore.Models.Book
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Add Book</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" sizes="15x15" href="~/Images/logo.png">
+    <link href="~/Css/bootstrap-5.0.2-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link href="~/Css/index.css" rel="stylesheet" />
+    <style>
+        .navbar .navbar-nav {
+            margin-right: 45%;
+        }
+
+        .navbar .navbar-brand {
+            margin-right: 35%
+        }
+
+        .loginForm {
+            margin: 55px 500px;
+        }
+    </style>
+</head>
+<body>
+    <!--start navbar-->
+    <nav class="navbar navbar-expand-sm">
+        <div class="container">
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")">E-bookstore</a>
+            <!--button in case mobile-->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mynavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item row" style="flex-direction:row; align-items:center; flex-wrap:nowrap">
+                        <i class="fa fa-shopping-cart col-1" aria-hidden="true"></i>
+                        @Html.ActionLink("Your Cart", "../UserOrderedBooks/Index", new { id = Convert.ToInt32(Session["ID"]) }, new { @class = "nav-link col-10" })
+                    </li>
+                </ul>
+                <!--show when user login-->
+                @if (Session["username"] != null)
+                {
+                    <div class="d-flex" id="user_login">
+                        @if (Session["username"].ToString() == "Admin")
+                        {
+                            <a id="user_name" class="nav-link" style="text-decoration:underline;" href="@Url.Action("CreateBook", "Books")">Add Book</a>
+                        }
+                        else
+                        {
+                            <a id="user_name" class="nav-link" style="text-decoration:underline;" href="@Url.Action("EditUserInfo/" + Convert.ToInt32(Session["ID"]) , "Users")">@Session["UserName"].ToString()</a>
+                        }
+                        @Html.ActionLink("Logout", "../Home/Logout", null, new { @class = "nav-link" })
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex" style="align-items: center;" id="guest">
+                        @Html.ActionLink("Sign up", "../Users/SignUp", null, new { @class = "nav-link" })
+                        /
+                        @Html.ActionLink("Login", "../Users/Login", null, new { @class = "nav-link" })
+                    </div>
+                }
+            </div>
+        </div>
+    </nav>
+    <!--end navbar-->
+    <div class="container">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="form-horizontal">
+                    <br />
+                    <h3 style="margin-bottom:10px">New Book</h3>
+                    <div class="form-group">
+                        <label for="name" class="form-label">Book name:</label>
+                        <div class="col-md-4">
+                            @Html.EditorFor(model => model.bookTitle, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.bookTitle, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="info" class="form-label">Book info:</label>
+                        <div class="col-md-4">
+                            @Html.TextAreaFor(model => model.bookDiscription, new { @class = "form-control", rows = "3" })
+                            @Html.ValidationMessageFor(model => model.bookDiscription, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category" class="form-label">Price:</label>
+                        <div class="col-md-4">
+                            @Html.EditorFor(model => model.bookPrice, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.bookPrice, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label for="photo" class="form-label">Book image</label>
+                            @Html.TextBoxFor(model => model.bookImage, new { @class = "form-control", type = "file" })
+                            @Html.ValidationMessageFor(model => model.bookImage, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label for="director" class="form-label">Book Author Name:</label>
+                            @Html.EditorFor(model => model.bookAuthorName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.bookAuthorName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label for="director" class="form-label">Book Quantity:</label>
+                            @Html.EditorFor(model => model.bookQuantity, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.bookAuthorName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-dark" style="width:100px;margin:15px 0px" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+
+    <!--start footer-->
+    <footer>
+        <div class="container">
+            <h3>Copyrights © 2022 All rights reserved</h3>
+        </div>
+    </footer>
+    <!--end footer-->
+
+</body>
+</html>
