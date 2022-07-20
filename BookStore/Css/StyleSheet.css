@@ -1,0 +1,64 @@
+﻿/* start global */
+
+* {
+    box-sizing: border-box
+}
+
+a {
+    text-decoration: none;
+}
+
+body {
+    margin: 0;
+}
+/* end global */
+
+/*start  navbar */
+nav {
+    background-color: #212529;
+    color: white;
+    position: fixed;
+    top: 0;
+}
+
+    nav a {
+        color: #C2C8C5 !important;
+    }
+
+        nav a:hover {
+            color: white !important;
+        }
+
+    nav .navbar-brand img {
+        width: 215px;
+    }
+
+.navbar .navbar-nav {
+    margin-right: 10%;
+}
+
+.navbar form {
+    margin-right: 11%;
+    width: 275px;
+}
+/*end  navbar */
+/* coordinating the form */
+.signUpForm {
+    margin: 55px 500px;
+}
+
+#img-btn {
+    border: 1px solid #ced4da !important;
+    color: #6c757d !important;
+}
+/* start footer */
+footer {
+    background-color: #212529;
+    text-align: center;
+    color: white;
+    height: 50px;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+/* end footer */

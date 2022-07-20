@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BookStoreModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Book">
+    <Key>
+      <PropertyRef Name="bookId" />
+    </Key>
+    <Property Name="bookId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="bookTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="bookDiscription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="bookImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="bookPrice" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="bookQuantity" Type="Int32" Nullable="false" />
+    <Property Name="bookAuthorName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="UserOrderedBooks" Relationship="Self.FK__UserOrder__bookI__2C3393D0" FromRole="Books" ToRole="UserOrderedBook" />
+  </EntityType>
+  <EntityType Name="UserOrderedBook">
+    <Key>
+      <PropertyRef Name="orderId" />
+    </Key>
+    <Property Name="orderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userId" Type="Int32" />
+    <Property Name="bookId" Type="Int32" />
+    <NavigationProperty Name="Book" Relationship="Self.FK__UserOrder__bookI__2C3393D0" FromRole="UserOrderedBook" ToRole="Books" />
+    <NavigationProperty Name="User" Relationship="Self.FK__UserOrder__userI__2B3F6F97" FromRole="UserOrderedBook" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="userID" />
+    </Key>
+    <Property Name="userID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userFirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="userLastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="userEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="userPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="userImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="UserOrderedBooks" Relationship="Self.FK__UserOrder__userI__2B3F6F97" FromRole="Users" ToRole="UserOrderedBook" />
+  </EntityType>
+  <EntityType Name="Admin">
+    <Key>
+      <PropertyRef Name="adminEmail" />
+      <PropertyRef Name="adminPassword" />
+    </Key>
+    <Property Name="adminEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="adminPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__UserOrder__bookI__2C3393D0">
+    <End Role="Books" Type="Self.Book" Multiplicity="0..1" />
+    <End Role="UserOrderedBook" Type="Self.UserOrderedBook" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Books">
+        <PropertyRef Name="bookId" />
+      </Principal>
+      <Dependent Role="UserOrderedBook">
+        <PropertyRef Name="bookId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__UserOrder__userI__2B3F6F97">
+    <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+    <End Role="UserOrderedBook" Type="Self.UserOrderedBook" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="userID" />
+      </Principal>
+      <Dependent Role="UserOrderedBook">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="BookStoreDB" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Books" EntityType="Self.Book" />
+    <EntitySet Name="UserOrderedBooks" EntityType="Self.UserOrderedBook" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <EntitySet Name="Admins" EntityType="Self.Admin" />
+    <AssociationSet Name="FK__UserOrder__bookI__2C3393D0" Association="Self.FK__UserOrder__bookI__2C3393D0">
+      <End Role="Books" EntitySet="Books" />
+      <End Role="UserOrderedBook" EntitySet="UserOrderedBooks" />
+    </AssociationSet>
+    <AssociationSet Name="FK__UserOrder__userI__2B3F6F97" Association="Self.FK__UserOrder__userI__2B3F6F97">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="UserOrderedBook" EntitySet="UserOrderedBooks" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

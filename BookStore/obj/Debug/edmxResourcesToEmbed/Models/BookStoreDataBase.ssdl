@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BookStoreModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'BookStore.dbo.Admins' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="Admins">
+    <Key>
+      <PropertyRef Name="adminEmail" />
+      <PropertyRef Name="adminPassword" />
+    </Key>
+    <Property Name="adminEmail" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="adminPassword" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Books">
+    <Key>
+      <PropertyRef Name="bookId" />
+    </Key>
+    <Property Name="bookId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="bookTitle" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="bookDiscription" Type="varchar(max)" Nullable="false" />
+    <Property Name="bookImage" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="bookPrice" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="bookQuantity" Type="int" Nullable="false" />
+    <Property Name="bookAuthorName" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserOrderedBook">
+    <Key>
+      <PropertyRef Name="orderId" />
+    </Key>
+    <Property Name="orderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="bookId" Type="int" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="userID" />
+    </Key>
+    <Property Name="userID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userFirstName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="userLastName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="userEmail" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="userPassword" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="userImage" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__UserOrder__bookI__534D60F1">
+    <End Role="Books" Type="Self.Books" Multiplicity="0..1" />
+    <End Role="UserOrderedBook" Type="Self.UserOrderedBook" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Books">
+        <PropertyRef Name="bookId" />
+      </Principal>
+      <Dependent Role="UserOrderedBook">
+        <PropertyRef Name="bookId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__UserOrder__userI__52593CB8">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="UserOrderedBook" Type="Self.UserOrderedBook" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="userID" />
+      </Principal>
+      <Dependent Role="UserOrderedBook">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="BookStoreModelStoreContainer">
+    <EntitySet Name="Books" EntityType="Self.Books" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserOrderedBook" EntityType="Self.UserOrderedBook" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Admins" EntityType="Self.Admins" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Admins].[adminEmail] AS [adminEmail], 
+    [Admins].[adminPassword] AS [adminPassword]
+    FROM [dbo].[Admins] AS [Admins]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__UserOrder__bookI__534D60F1" Association="Self.FK__UserOrder__bookI__534D60F1">
+      <End Role="Books" EntitySet="Books" />
+      <End Role="UserOrderedBook" EntitySet="UserOrderedBook" />
+    </AssociationSet>
+    <AssociationSet Name="FK__UserOrder__userI__52593CB8" Association="Self.FK__UserOrder__userI__52593CB8">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="UserOrderedBook" EntitySet="UserOrderedBook" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
